@@ -16,7 +16,8 @@ The Kanbas application should include a link to navigate back to the landing pag
       <br /><br />
 
       <label htmlFor="wd-points"><b>Points</b></label><br />
-      <input id="wd-points" value={100} /><br /><br />
+      <input id="wd-points" type="number" defaultValue={100} />
+
 
       <label htmlFor="wd-group"><b>Assignment Group</b></label><br />
       <select id="wd-group">
@@ -54,13 +55,16 @@ The Kanbas application should include a link to navigate back to the landing pag
       <input id="wd-assign-to" value="Everyone" /><br /><br />
 
       <label htmlFor="wd-due"><b>Due</b></label><br />
-      <input type="date" id="wd-due" /><br /><br />
+      <input type="date" id="wd-due" defaultValue="2025-07-15" />
+
 
       <label htmlFor="wd-available-from"><b>Available from</b></label><br />
-      <input type="date" id="wd-available-from" /><br /><br />
+     <input type="date" id="wd-available-from" defaultValue="2025-07-10" />
+
 
       <label htmlFor="wd-available-until"><b>Until</b></label><br />
-      <input type="date" id="wd-available-until" /><br /><br />
+      <input type="date" id="wd-available-until" defaultValue="2025-07-20" />
+
 
       <button>Cancel</button>
       <button>Save</button>
