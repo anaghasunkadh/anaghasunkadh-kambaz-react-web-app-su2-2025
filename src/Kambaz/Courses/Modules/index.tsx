@@ -2,7 +2,6 @@ import ModulesControls from "./ModulesControls";
 import { BsGripVertical } from "react-icons/bs";
 import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
-import { HiOutlinePencilAlt } from "react-icons/hi";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 export default function Modules() {
     return (
