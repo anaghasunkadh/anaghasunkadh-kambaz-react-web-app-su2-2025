@@ -18,11 +18,12 @@ export default function Landing() {
 
       <h3><b>GitHub Repositories</b></h3>
       <a
-        href="https://github.com/anaghasunkadh/anaghasunkadh-kambaz-react-web-app-su2-2025/tree/a1"
+        href="https://github.com/anaghasunkadh/anaghasunkadh-kambaz-react-web-app-su2-2025"
         target="blank"
         rel="noreferrer"
       >
-        Assignment 1     </a>
+        Assignments    </a>
+        
     </div>
   );
 }

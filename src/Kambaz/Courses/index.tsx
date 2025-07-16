@@ -8,6 +8,8 @@ import Piazza from "./Piazza";
 import Zoom from "./zoom";
 import Quizzes from "./Quizzes";
 import Grades from "./grades";
+import { FaAlignJustify } from "react-icons/fa";
+import PeopleTable from "./People/Table";
 
 
 
@@ -16,14 +18,15 @@ import Grades from "./grades";
 export default function Courses() {
   return (
     <div id="wd-courses">
-      <h2>Course 1234</h2>
+      <h2  className="text-danger">
+      <FaAlignJustify className="me-4 fs-4 mb-1" />
+Course 1234</h2>
       <hr />
-      <table>
-        <tr>
-          <td valign="top">
-            <CourseNavigation />
-          </td>
-          <td valign="top">
+      <div className="d-flex">
+        <div className="d-none d-md-block">
+      <CourseNavigation />
+      </div>
+    <div className="flex-fill"></div>
             <Routes>
               <Route path="/" element={<Navigate to="Home" />} />
               <Route path="Modules" element={<Modules />} />
@@ -31,6 +34,7 @@ export default function Courses() {
               <Route path="Assignments/:aid" element={<AssignmentEditor />} />
               <Route path="Home" element={<Home />} />
               <Route path="Assignments" element={<Assignments />} />
+               <Route path="People" element={<PeopleTable />} />
               <Route path="Piazza" element={<Piazza />} />
               <Route path="Zoom" element={<Zoom />} />
 <Route path="Quizzes" element={<Quizzes />} />
@@ -38,9 +42,7 @@ export default function Courses() {
 
               <Route path="People" element={<h2>People</h2>} />
             </Routes>
-          </td>
-        </tr>
-      </table>
+         </div>
     </div>
   );
 }
