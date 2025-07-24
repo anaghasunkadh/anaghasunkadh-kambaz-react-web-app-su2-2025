@@ -30,7 +30,6 @@ import Styles from "./Styles.tsx";
 import Add from "./Add"
 import Square from "./Square";
 import Highlight from "./Highlight"
-import AddPathParameters from "./AddPathParameters.tsx";
 import PathParameters from "./PathParameters.tsx";
 export default function Lab3() {
   console.log('Hello World!');
