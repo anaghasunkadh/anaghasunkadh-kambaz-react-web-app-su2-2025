@@ -1,6 +1,6 @@
 
-import { Link, NavLink } from "react-router-dom";
-import { useLocation,useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { courses } from "../Database";
 export default function CoursesNavigation() {
   const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
