@@ -1,24 +1,31 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Row, Col } from 'react-bootstrap';
+import { useParams, Link } from 'react-router-dom';
+import * as db from '../../Database';
 
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+  const assignment = db.assignments.find((assignment: any) => assignment._id === aid);
+  
   return (
     <div className="container mt-4" id="wd-assignments-editor">
       <h2 className="mb-4">Edit Assignment</h2>
+      
       <Form>
-
-        {/* Assignment Name */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-name">Assignment Name</Form.Label>
           </Col>
           <Col md={9}>
-            <Form.Control id="wd-name" type="text" defaultValue="A1 - ENV + HTML" />
+            <Form.Control 
+              id="wd-name" 
+              type="text" 
+              defaultValue={assignment ? assignment.title : "A1 - ENV + HTML"} 
+            />
           </Col>
         </Row>
 
-        {/* Description */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-description">Description</Form.Label>
@@ -31,15 +38,14 @@ export default function AssignmentEditor() {
               defaultValue={`The assignment is available online. Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following:
 - Your full name and section
 - Links to each of the lab assignments
-- Link to the Kanbas application
+- Link to the Kambas application
 - Links to all relevant source code repositories
 
-The Kanbas application should include a link to navigate back to the landing page.`}
+The Kambas application should include a link to navigate back to the landing page.`}
             />
           </Col>
         </Row>
 
-        {/* Points */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-points">Points</Form.Label>
@@ -49,7 +55,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Assignment Group */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-group">Assignment Group</Form.Label>
@@ -63,7 +68,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Display Grade as */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-display-grade-as">Display Grade as</Form.Label>
@@ -77,7 +81,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Submission Type */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-submission-type">Submission Type</Form.Label>
@@ -90,7 +93,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Online Entry Options */}
         <Row className="mb-4">
           <Col md={3}>
             <Form.Label>Online Entry Options</Form.Label>
@@ -106,7 +108,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Assign to */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-assign-to">Assign to</Form.Label>
@@ -116,7 +117,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Due Date */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-due-date">Due Date</Form.Label>
@@ -126,7 +126,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Available from */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-available-from">Available from</Form.Label>
@@ -136,7 +135,6 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Until */}
         <Row className="mb-3">
           <Col md={3}>
             <Form.Label htmlFor="wd-available-until">Until</Form.Label>
@@ -146,11 +144,14 @@ The Kanbas application should include a link to navigate back to the landing pag
           </Col>
         </Row>
 
-        {/* Buttons */}
         <Row className="mt-4">
           <Col md={12} className="d-flex justify-content-end">
-            <Button variant="secondary" className="me-2">Cancel</Button>
-            <Button variant="danger">Save</Button>
+            <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+              <Button variant="secondary" className="me-2">Cancel</Button>
+            </Link>
+            <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+              <Button variant="danger">Save</Button>
+            </Link>
           </Col>
         </Row>
       </Form>

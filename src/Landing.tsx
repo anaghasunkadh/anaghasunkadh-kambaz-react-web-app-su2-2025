@@ -14,7 +14,7 @@ export default function Landing() {
       </ul>
 
       <h3><b>Kambaz App</b></h3>
-      <Link to="/Kambaz">Go to Kanbas App</Link>
+      <Link to="/Kambaz">Go to Kambaz App</Link>
 
       <h3><b>GitHub Repositories</b></h3>
       <a
