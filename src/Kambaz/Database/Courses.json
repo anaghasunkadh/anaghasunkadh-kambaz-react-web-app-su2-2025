@@ -58,27 +58,5 @@
     "department": "D134",
     "credits": 3,
     "description": "Physical Chemistry merges the principles of physics and chemistry to understand the physical properties of molecules, the forces that act upon them, and the chemical reactions they undergo. Key topics include thermodynamics, kinetics, quantum mechanics, and spectroscopy. The course provides a comprehensive understanding of molecular behavior, reaction dynamics, and the application of mathematical methods in solving chemical problems. Labs focus on experimental techniques and data analysis, equipping students with skills necessary for research and advanced study in chemistry and related fields."
-  },
-  {
-    "_id": "RS107",
-    "name": "Ancient Languages and Scripts of Middle-earth",
-    "number": "ME101",
-    "startDate": "2023-01-10",
-    "endDate": "2023-05-15",
-    "department": "Languages",
-    "credits": 3,
-    "description": "This course offers an exploration of the ancient languages and scripts found throughout Middle-earth, including Elvish (Sindarin and Quenya), Dwarvish (Khuzdul), and the Black Speech of Mordor. Students will learn the historical and cultural contexts of these languages, their linguistic structures, and their usage in various inscriptions and texts. Emphasis is on understanding the philological aspects and the role of language in shaping Middle-earth's history and lore.",
-    "author": "654f9ec2ea7ead465908d1e3"
-  },
-  {
-    "_id": "RS108",
-    "name": "Wizards, Elves, and Men: Inter-species Diplomacy in Middle-earth",
-    "number": "ME102",
-    "startDate": "2023-01-10",
-    "endDate": "2023-05-15",
-    "department": "Political Studies",
-    "credits": 4,
-    "description": "This course explores the complex relationships and diplomatic interactions among the different races of Middle-earth: Elves, Men, Dwarves, and Wizards. Topics include the study of historical alliances, conflicts, and the role of leadership and wisdom in maintaining peace. Students will engage in discussions and case studies on key events in Middle-earth's history, such as the Council of Elrond and the War of the Ring, to understand the principles of diplomacy and conflict resolution in a multi-species context.",
-    "author": "654f9ec2ea7ead465908d1e3"
   }
 ]
