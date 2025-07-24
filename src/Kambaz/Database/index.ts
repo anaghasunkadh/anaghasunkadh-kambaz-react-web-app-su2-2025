@@ -1,9 +1,10 @@
-import coursesData from "./courses.json";
-import modulesData from "./modules.json";
-import assignmentsData from "./assignments.json";
-import usersData from "./users.json";
+// src/Kambaz/Database/index.ts
+import coursesRaw from "./courses.json?raw";
+import modulesRaw from "./modules.json?raw";
+import assignmentsRaw from "./assignments.json?raw";
+import usersRaw from "./users.json?raw";
 
-export const courses = coursesData;
-export const modules = modulesData;
-export const assignments = assignmentsData;
-export const users = usersData;
+export const courses = JSON.parse(coursesRaw);
+export const modules = JSON.parse(modulesRaw);
+export const assignments = JSON.parse(assignmentsRaw);
+export const users = JSON.parse(usersRaw);
