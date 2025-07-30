@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useParams } from "react-router";
-import * as db from "../../Database";
 import ModulesControls from "./ModulesControls";
 import { BsGripVertical } from "react-icons/bs";
 import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { v4 as uuidv4 } from "uuid";
 import { FormControl } from "react-bootstrap";
 import { addModule, editModule, updateModule, deleteModule }
   from "./reducer";
