@@ -1,8 +1,15 @@
+import ModuleEditor from "./ModuleEditor";
 import { FaPlus } from "react-icons/fa6";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import GreenCheckmark from "./GreenCheckmark";
+import { useState } from "react";
 
-export default function ModulesControls() {
+export default function ModulesControls({ moduleName, setModuleName, addModule }: { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }) {
+  
+  const [show, setShow] = useState(false);
+const handleClose = () => setShow(false);
+const handleShow = () => setShow(true);
+  
   return (
     <div id="wd-modules-controls" className="text-nowrap float-end">
       {/* Collapse All Button */}
@@ -50,10 +57,18 @@ export default function ModulesControls() {
       </div>
 
       {/* + Module Button */}
-      <button id="wd-add-module-btn" className="btn btn-lg btn-danger">
+      <button onClick={handleShow} id="wd-add-module-btn" className="btn btn-lg btn-danger">
         <FaPlus className="me-2 position-relative" style={{ bottom: "1px" }} />
         Module
       </button>
+      <ModuleEditor 
+  show={show} 
+  handleClose={handleClose} 
+  dialogTitle="Add Module"
+  moduleName={moduleName} 
+  setModuleName={setModuleName} 
+  addModule={addModule} 
+/>
     </div>
   );
 }

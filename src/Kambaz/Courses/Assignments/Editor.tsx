@@ -1,16 +1,154 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Row, Col } from 'react-bootstrap';
-import { useParams, Link } from 'react-router-dom';
-import * as db from '../../Database';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addAssignment, updateAssignment } from './reducer';
 
 export default function AssignmentEditor() {
-  const { cid, aid } = useParams();
-  const assignment = db.assignments.find((assignment: any) => assignment._id === aid);
+  const params = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   
+  // Log all params to see what we're getting
+  console.log('ALL URL PARAMS:', params);
+  console.log('assignmentId param:', params.assignmentId);
+  console.log('cid param:', params.cid);
+  console.log(' All keys in params:', Object.keys(params));
+  
+  const { cid, aid: assignmentId } = params;
+  
+  // Get assignments from Redux store
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  
+  // Determine if we're creating or editing
+  const isNewAssignment = assignmentId === 'new';
+  
+  // Find existing assignment
+  const existingAssignment = !isNewAssignment ? 
+    assignments.find((assignment: any) => assignment._id === assignmentId) : null;
+  
+  console.log(' COMPLETE DEBUG INFO:');
+  console.log('URL:', window.location.href);
+  console.log('assignmentId from params:', assignmentId);
+  console.log('cid from params:', cid);
+  console.log('isNewAssignment:', isNewAssignment);
+  console.log('existingAssignment found:', existingAssignment);
+  console.log('All assignments in store:', assignments.map((a: any) => ({ id: a._id, title: a.title })));
+  
+  // State for form data
+  const [assignment, setAssignment] = useState({
+    _id: '',
+    title: 'New Assignment',
+    description: `The assignment is available online...`,
+    points: 100,
+    dueDate: '2025-07-15',
+    availableFromDate: '2025-07-10',
+    availableUntilDate: '2025-07-20',
+    course: cid || ''
+  });
+
+  // Load existing assignment data when editing
+  useEffect(() => {
+    if (!isNewAssignment && existingAssignment) {
+      console.log(' Loading existing assignment:', existingAssignment);
+      setAssignment({
+        _id: existingAssignment._id,
+        title: existingAssignment.title || 'New Assignment',
+        description: existingAssignment.description || '',
+        points: existingAssignment.points || 100,
+        dueDate: existingAssignment.dueDate || '2025-07-15',
+        availableFromDate: existingAssignment.availableFromDate || '2025-07-10',
+        availableUntilDate: existingAssignment.availableUntilDate || '2025-07-20',
+        course: existingAssignment.course || cid || '',
+      });
+    }
+  }, [isNewAssignment, existingAssignment, cid]);
+
+  // Handle form field changes
+  const handleChange = (field: string, value: any) => {
+    setAssignment(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Handle save
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (isNewAssignment) {
+      const newAssignment = {
+        title: assignment.title,
+        description: assignment.description,
+        points: assignment.points,
+        dueDate: assignment.dueDate,
+        availableFromDate: assignment.availableFromDate,
+        availableUntilDate: assignment.availableUntilDate,
+        course: cid
+      };
+      dispatch(addAssignment(newAssignment));
+    } else {
+      const assignmentToUpdate = {
+        ...assignment,
+        _id: assignmentId,
+        course: cid
+      };
+      dispatch(updateAssignment(assignmentToUpdate));
+    }
+
+    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+  };
+
+  // Handle cancel
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+  };
+
+  // If assignmentId is undefined, show debug info
+  if (assignmentId === undefined) {
+    return (
+      <div className="container mt-4">
+        <h2>URL Parameter Debug</h2>
+        <div style={{ background: '#ffebee', padding: '20px', border: '1px solid red' }}>
+          <h4>Assignment ID is undefined!</h4>
+          <p><strong>Current URL:</strong> {window.location.href}</p>
+          <p><strong>All URL params:</strong> {JSON.stringify(params)}</p>
+          <p><strong>assignmentId param:</strong> {assignmentId}</p>
+          <p><strong>cid param:</strong> {cid}</p>
+          <p><strong>Expected format:</strong> /Kambaz/Courses/[COURSE_ID]/Assignments/[ASSIGNMENT_ID]</p>
+        </div>
+        <Button onClick={() => navigate(`/Kambaz/Courses/${cid}/Assignments`)}>
+          Back to Assignments
+        </Button>
+      </div>
+    );
+  }
+
+  // If we're trying to edit but can't find the assignment
+  if (!isNewAssignment && !existingAssignment) {
+    return (
+      <div className="container mt-4">
+        <h2>Assignment Not Found</h2>
+        <div style={{ background: '#fff3cd', padding: '20px', border: '1px solid orange' }}>
+          <p><strong>Looking for assignment ID:</strong> {assignmentId}</p>
+          <p><strong>Available assignment IDs:</strong> {assignments.map((a: any) => a._id).join(', ')}</p>
+          <p><strong>Current URL:</strong> {window.location.href}</p>
+        </div>
+        <Button onClick={() => navigate(`/Kambaz/Courses/${cid}/Assignments`)}>
+          Back to Assignments
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="container mt-4" id="wd-assignments-editor">
-      <h2 className="mb-4">Edit Assignment</h2>
+      <h2 className="mb-4">{isNewAssignment ? 'Create Assignment' : 'Edit Assignment'}</h2>
+      
+     
       
       <Form>
         <Row className="mb-3">
@@ -21,7 +159,8 @@ export default function AssignmentEditor() {
             <Form.Control 
               id="wd-name" 
               type="text" 
-              defaultValue={assignment ? assignment.title : "A1 - ENV + HTML"} 
+              value={assignment.title}
+              onChange={(e) => handleChange('title', e.target.value)}
             />
           </Col>
         </Row>
@@ -35,13 +174,8 @@ export default function AssignmentEditor() {
               id="wd-description"
               as="textarea"
               rows={6}
-              defaultValue={`The assignment is available online. Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following:
-- Your full name and section
-- Links to each of the lab assignments
-- Link to the Kambas application
-- Links to all relevant source code repositories
-
-The Kambas application should include a link to navigate back to the landing page.`}
+              value={assignment.description}
+              onChange={(e) => handleChange('description', e.target.value)}
             />
           </Col>
         </Row>
@@ -51,69 +185,12 @@ The Kambas application should include a link to navigate back to the landing pag
             <Form.Label htmlFor="wd-points">Points</Form.Label>
           </Col>
           <Col md={9}>
-            <Form.Control id="wd-points" type="number" defaultValue={100} />
-          </Col>
-        </Row>
-
-        <Row className="mb-3">
-          <Col md={3}>
-            <Form.Label htmlFor="wd-group">Assignment Group</Form.Label>
-          </Col>
-          <Col md={9}>
-            <Form.Select id="wd-group">
-              <option>ASSIGNMENTS</option>
-              <option>Labs</option>
-              <option>Evaluation</option>
-            </Form.Select>
-          </Col>
-        </Row>
-
-        <Row className="mb-3">
-          <Col md={3}>
-            <Form.Label htmlFor="wd-display-grade-as">Display Grade as</Form.Label>
-          </Col>
-          <Col md={9}>
-            <Form.Select id="wd-display-grade-as">
-              <option>Percentage</option>
-              <option>Points</option>
-              <option>Letter</option>
-            </Form.Select>
-          </Col>
-        </Row>
-
-        <Row className="mb-3">
-          <Col md={3}>
-            <Form.Label htmlFor="wd-submission-type">Submission Type</Form.Label>
-          </Col>
-          <Col md={9}>
-            <Form.Select id="wd-submission-type">
-              <option>Online</option>
-              <option>In Person</option>
-            </Form.Select>
-          </Col>
-        </Row>
-
-        <Row className="mb-4">
-          <Col md={3}>
-            <Form.Label>Online Entry Options</Form.Label>
-          </Col>
-          <Col md={9}>
-            <div className="d-flex flex-column">
-              <Form.Check type="checkbox" id="wd-text-entry" label="Text Entry" className="mb-2" />
-              <Form.Check type="checkbox" id="wd-website-url" label="Website URL" className="mb-2" />
-              <Form.Check type="checkbox" id="wd-media-recordings" label="Media Recordings" className="mb-2" />
-              <Form.Check type="checkbox" id="wd-student-annotation" label="Student Annotation" className="mb-2" />
-              <Form.Check type="checkbox" id="wd-file-upload" label="File Uploads" />
-            </div>
-          </Col>
-        </Row>
-
-        <Row className="mb-3">
-          <Col md={3}>
-            <Form.Label htmlFor="wd-assign-to">Assign to</Form.Label>
-          </Col>
-          <Col md={9}>
-            <Form.Control id="wd-assign-to" type="text" defaultValue="Everyone" />
+            <Form.Control 
+              id="wd-points" 
+              type="number" 
+              value={assignment.points}
+              onChange={(e) => handleChange('points', parseInt(e.target.value) || 0)}
+            />
           </Col>
         </Row>
 
@@ -122,7 +199,12 @@ The Kambas application should include a link to navigate back to the landing pag
             <Form.Label htmlFor="wd-due-date">Due Date</Form.Label>
           </Col>
           <Col md={9}>
-            <Form.Control id="wd-due-date" type="date" defaultValue="2025-07-15" />
+            <Form.Control 
+              id="wd-due-date" 
+              type="date" 
+              value={assignment.dueDate}
+              onChange={(e) => handleChange('dueDate', e.target.value)}
+            />
           </Col>
         </Row>
 
@@ -131,7 +213,12 @@ The Kambas application should include a link to navigate back to the landing pag
             <Form.Label htmlFor="wd-available-from">Available from</Form.Label>
           </Col>
           <Col md={9}>
-            <Form.Control id="wd-available-from" type="date" defaultValue="2025-07-10" />
+            <Form.Control 
+              id="wd-available-from" 
+              type="date" 
+              value={assignment.availableFromDate}
+              onChange={(e) => handleChange('availableFromDate', e.target.value)}
+            />
           </Col>
         </Row>
 
@@ -140,18 +227,32 @@ The Kambas application should include a link to navigate back to the landing pag
             <Form.Label htmlFor="wd-available-until">Until</Form.Label>
           </Col>
           <Col md={9}>
-            <Form.Control id="wd-available-until" type="date" defaultValue="2025-07-20" />
+            <Form.Control 
+              id="wd-available-until" 
+              type="date" 
+              value={assignment.availableUntilDate}
+              onChange={(e) => handleChange('availableUntilDate', e.target.value)}
+            />
           </Col>
         </Row>
 
         <Row className="mt-4">
           <Col md={12} className="d-flex justify-content-end">
-            <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
-              <Button variant="secondary" className="me-2">Cancel</Button>
-            </Link>
-            <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
-              <Button variant="danger">Save</Button>
-            </Link>
+            <Button 
+              variant="secondary" 
+              className="me-2"
+              onClick={handleCancel}
+              type="button"
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="danger" 
+              onClick={handleSave}
+              type="button"
+            >
+              {isNewAssignment ? 'Save' : 'Update'}
+            </Button>
           </Col>
         </Row>
       </Form>

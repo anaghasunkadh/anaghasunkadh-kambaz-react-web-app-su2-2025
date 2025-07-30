@@ -1,34 +1,21 @@
 import { NavLink } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 export default function AccountNavigation() {
-  return (
-    <div id="wd-account-navigation" className="d-flex flex-column gap-2 p-3">
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const links = currentUser ? ["Profile"] : ["Signin", "Signup"]
+ return (
+  <div id="wd-account-navigation" className="d-flex flex-column gap-2 p-3">
+    {links.map((link) => (
       <NavLink
-        to="/Kambaz/Account/Signin"
+        key={link}
+        to={`/Kambaz/Account/${link}`}
         className={({ isActive }) =>
           `fw-bold text-decoration-none ${isActive ? "text-black" : "text-danger"}`
         }
       >
-        Signin
+        {link}
       </NavLink>
-
-      <NavLink
-        to="/Kambaz/Account/Signup"
-        className={({ isActive }) =>
-          `fw-bold text-decoration-none ${isActive ? "text-black" : "text-danger"}`
-        }
-      >
-        Signup
-      </NavLink>
-
-      <NavLink
-        to="/Kambaz/Account/Profile"
-        className={({ isActive }) =>
-          `fw-bold text-decoration-none ${isActive ? "text-black" : "text-danger"}`
-        }
-      >
-        Profile
-      </NavLink>
-    </div>
-  );
+    ))}
+  </div>
+);
 }
