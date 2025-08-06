@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useParams, useLocation } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./styles.css";

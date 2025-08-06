@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import  { useEffect, useState } from "react";
 
-const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 import * as client from "./client";
 
 export default function HttpClient() {

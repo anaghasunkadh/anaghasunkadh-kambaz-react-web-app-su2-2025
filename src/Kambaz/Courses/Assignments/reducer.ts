@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as db from "../../Database";
-import { v4 as uuidv4 } from "uuid";
+
 
 const initialState = {
    assignments: [] as any[],
@@ -24,7 +23,7 @@ const assignmentsSlice = createSlice({
       );
     },
     updateAssignment: (state, { payload: assignment }) => {
-      console.log("🛠 Reducer called → updateAssignment:", assignment);
+      console.log(" Reducer called → updateAssignment:", assignment);
       
       // Ensure we have an _id to update
       if (!assignment._id) {

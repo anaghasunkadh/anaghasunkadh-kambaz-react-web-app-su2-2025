@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import * as coursesClient from "../client";
-import * as modulesClient from "./client";
 import { BsGripVertical } from "react-icons/bs";
 import { ListGroup, FormControl, Button } from "react-bootstrap";
 import ModuleControlButtons from "./ModuleControlButtons";
