@@ -4,7 +4,8 @@ import { Row, Col } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addAssignment, updateAssignment } from './reducer';
+import { updateAssignment, setAssignments } from './reducer';
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const params = useParams();
@@ -74,31 +75,40 @@ export default function AssignmentEditor() {
     }));
   };
 
-  // Handle save
-  const handleSave = (e: React.MouseEvent) => {
+  // Handle save - UPDATED TO USE SERVER API
+  const handleSave = async (e: React.MouseEvent) => {
     e.preventDefault();
 
-    if (isNewAssignment) {
-      const newAssignment = {
-        title: assignment.title,
-        description: assignment.description,
-        points: assignment.points,
-        dueDate: assignment.dueDate,
-        availableFromDate: assignment.availableFromDate,
-        availableUntilDate: assignment.availableUntilDate,
-        course: cid
-      };
-      dispatch(addAssignment(newAssignment));
-    } else {
-      const assignmentToUpdate = {
-        ...assignment,
-        _id: assignmentId,
-        course: cid
-      };
-      dispatch(updateAssignment(assignmentToUpdate));
-    }
+    try {
+      if (isNewAssignment) {
+        const newAssignment = {
+          title: assignment.title,
+          description: assignment.description,
+          points: assignment.points,
+          dueDate: assignment.dueDate,
+          availableFromDate: assignment.availableFromDate,
+          availableUntilDate: assignment.availableUntilDate,
+          course: cid
+        };
+        await assignmentsClient.createAssignmentForCourse(cid!, newAssignment);
+        
+        // Refresh assignments from server
+        const assignments = await assignmentsClient.findAssignmentsForCourse(cid!);
+        dispatch(setAssignments(assignments));
+      } else {
+        const assignmentToUpdate = {
+          ...assignment,
+          _id: assignmentId,
+          course: cid
+        };
+        await assignmentsClient.updateAssignment(assignmentToUpdate);
+        dispatch(updateAssignment(assignmentToUpdate));
+      }
 
-    navigate(`/Kambaz/Courses/${cid}/Assignments`);
+      navigate(`/Kambaz/Courses/${cid}/Assignments`);
+    } catch (error) {
+      console.error("Error saving assignment:", error);
+    }
   };
 
   // Handle cancel

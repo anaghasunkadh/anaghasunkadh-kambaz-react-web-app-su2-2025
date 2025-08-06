@@ -1,74 +1,61 @@
-import ModuleEditor from "./ModuleEditor";
 import { FaPlus } from "react-icons/fa6";
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import GreenCheckmark from "./GreenCheckmark";
+import { Button, Dropdown } from "react-bootstrap";
+import { FaRegEyeSlash } from "react-icons/fa";
+import ModuleEditor from "./ModuleEditor";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-export default function ModulesControls({ moduleName, setModuleName, addModule }: { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }) {
-  
+export default function ModulesControls(
+  { moduleName, setModuleName, addModule }:
+    { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }) {
   const [show, setShow] = useState(false);
-const handleClose = () => setShow(false);
-const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
   
   return (
-    <div id="wd-modules-controls" className="text-nowrap float-end">
-      {/* Collapse All Button */}
-      <button id="wd-collapse-all" className="btn btn-lg btn-secondary me-2">
-        Collapse All
-      </button>
-
-      {/* View Progress Button */}
-      <button id="wd-view-progress" className="btn btn-lg btn-secondary me-2">
-        View Progress
-      </button>
-
-      {/* Publish All Dropdown */}
-      <div className="dropdown d-inline me-2">
-        <button
-          id="wd-publish-all-btn"
-          className="btn btn-lg btn-secondary dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
+      <div id="wd-modules-controls" className="text-nowrap">
+        <Button 
+          variant="danger" 
+          onClick={handleShow} 
+          size="lg" 
+          className="me-1 float-end" 
+          id="wd-add-module-btn"
+          disabled={!currentUser || currentUser.role !== "FACULTY"}
         >
-          <GreenCheckmark /> Publish All
-        </button>
-        <ul className="dropdown-menu">
-          <li>
-            <a id="wd-publish-all-modules-and-items" className="dropdown-item" href="#">
+          <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+          Module
+        </Button>
+        <Dropdown className="float-end me-2">
+          <Dropdown.Toggle variant="secondary" size="lg" id="wd-publish-all-btn">
+            <GreenCheckmark /> Publish All
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item id="wd-publish-all-modules-and-items">
               <GreenCheckmark /> Publish all modules and items
-            </a>
-          </li>
-          <li>
-            <a id="wd-publish-modules-only" className="dropdown-item" href="#">
+            </Dropdown.Item>
+            <Dropdown.Item id="wd-publish-modules-only">
               <GreenCheckmark /> Publish modules only
-            </a>
-          </li>
-          <li>
-            <a id="wd-unpublish-all-modules-and-items" className="dropdown-item" href="#">
-              <IoIosCloseCircleOutline /> Unpublish all modules and items
-            </a>
-          </li>
-          <li>
-            <a id="wd-unpublish-modules-only" className="dropdown-item" href="#">
-              <IoIosCloseCircleOutline /> Unpublish modules only
-            </a>
-          </li>
-        </ul>
+            </Dropdown.Item>
+            <Dropdown.Item id="wd-unpublish-all-modules-and-items">
+              <FaRegEyeSlash style={{ marginRight: 8 }} />
+              Unpublish all modules and items
+            </Dropdown.Item>
+            <Dropdown.Item id="wd-unpublish-modules-only">
+              <FaRegEyeSlash style={{ marginRight: 8 }} />
+              Unpublish modules only
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Button variant="secondary" size="lg" className="me-2 float-end" id="wd-view-progress">
+          View Progress
+        </Button>
+        <Button variant="secondary" size="lg" className="me-2 float-end" id="wd-collapse-all">
+          Collapse All
+        </Button>
+        <ModuleEditor show={show} handleClose={handleClose} dialogTitle="Add Module"
+          moduleName={moduleName} setModuleName={setModuleName} addModule={addModule} />
       </div>
-
-      {/* + Module Button */}
-      <button onClick={handleShow} id="wd-add-module-btn" className="btn btn-lg btn-danger">
-        <FaPlus className="me-2 position-relative" style={{ bottom: "1px" }} />
-        Module
-      </button>
-      <ModuleEditor 
-  show={show} 
-  handleClose={handleClose} 
-  dialogTitle="Add Module"
-  moduleName={moduleName} 
-  setModuleName={setModuleName} 
-  addModule={addModule} 
-/>
-    </div>
-  );
+    );
 }

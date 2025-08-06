@@ -8,7 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import AssignmentEditor from "./Editor";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment, setAssignments } from "./reducer";
+import { useEffect } from "react"; // Make sure this is imported
+import * as assignmentsClient from "./client";
 
 // Define the assignment type
 interface Assignment {
@@ -26,10 +28,29 @@ export default function Assignments() {
   const { cid } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   
   // Get assignments from Redux store instead of database
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
   const filteredAssignments: Assignment[] = assignments?.filter((assignment: Assignment) => assignment.course === cid) || [];
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      if (cid) {
+        try {
+          console.log('Fetching assignments for course:', cid);
+          const courseAssignments = await assignmentsClient.findAssignmentsForCourse(cid);
+          console.log('Fetched assignments:', courseAssignments);
+          dispatch(setAssignments(courseAssignments));
+        } catch (error) {
+          console.error("Error fetching assignments:", error);
+        }
+      }
+    };
+    
+    fetchAssignments();
+  }, [cid, dispatch]); // Run when cid or dispatch changes
+
+  
 
   // DEBUG: Log the assignments to see what we're working with
   console.log(' ASSIGNMENTS DEBUG:');

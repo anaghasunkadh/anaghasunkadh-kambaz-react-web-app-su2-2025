@@ -12,6 +12,7 @@ export default function Landing() {
         <li><Link to="/Labs/lab2">Lab 2</Link></li>
         <li><Link to="/Labs/lab3">Lab 3</Link></li>
         <li><Link to="/Labs/lab4">Lab 4</Link></li>
+        <li><Link to="/Labs/lab5">Lab 5</Link></li>
       </ul>
 
       <h3><b>Kambaz App</b></h3>

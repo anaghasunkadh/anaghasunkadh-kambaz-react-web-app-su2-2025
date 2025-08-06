@@ -1,0 +1,54 @@
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+
+export default function ProtectedCourseRoute({ children }: { children: any }) {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+  const { cid } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/Kambaz/Account/Signin");
+      return;
+    }
+
+    // Faculty can access all courses
+    if (currentUser.role === "FACULTY") {
+      return;
+    }
+
+    // Students can only access courses they're enrolled in
+    const isEnrolled = enrollments.some(
+      (enrollment: any) => 
+        enrollment.user === currentUser._id && 
+        enrollment.course === cid
+    );
+
+    if (!isEnrolled) {
+      navigate("/Kambaz/Dashboard");
+      return;
+    }
+  }, [currentUser, enrollments, cid, navigate]);
+
+  // Don't render anything if not authenticated
+  if (!currentUser) {
+    return null;
+  }
+
+  // Don't render if student is not enrolled (unless faculty)
+  if (currentUser.role !== "FACULTY") {
+    const isEnrolled = enrollments.some(
+      (enrollment: any) => 
+        enrollment.user === currentUser._id && 
+        enrollment.course === cid
+    );
+    
+    if (!isEnrolled) {
+      return null;
+    }
+  }
+
+  return {children}
+}
