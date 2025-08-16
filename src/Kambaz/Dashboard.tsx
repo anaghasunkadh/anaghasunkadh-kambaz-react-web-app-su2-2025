@@ -6,14 +6,17 @@ import * as enrollmentsClient from "./Enrollments/client";
 import { setEnrollments, addEnrollment, removeEnrollment } from "./Enrollments/reducer";
 
 export default function Dashboard({
-  courses, course, setCourse, addNewCourse, deleteCourse, updateCourse
+  courses, course, setCourse, addNewCourse, deleteCourse, updateCourse, enrolling, setEnrolling, updateEnrollment
 }: {
   courses: any[]; 
   course: any; 
   setCourse: (course: any) => void;
   addNewCourse: () => void; 
   deleteCourse: (courseId: string) => void;
-  updateCourse: () => void; 
+  updateCourse: () => void;
+  enrolling: boolean;
+  setEnrolling: (enrolling: boolean) => void;
+  updateEnrollment: (courseId: string, enrolled: boolean) => Promise<void>;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
  
@@ -71,10 +74,9 @@ const handleUnenroll = async (courseId: string) => {
 };
 
 // Add this to filter courses
-const displayedCourses = showAllCourses 
+const displayedCourses = enrolling 
   ? courses 
   : courses.filter((course: any) => isEnrolled(course._id));
-
 const canEdit = currentUser?.role === "FACULTY";
   return (
     <div id="wd-dashboard">
@@ -113,12 +115,12 @@ const canEdit = currentUser?.role === "FACULTY";
   <h2 id="wd-dashboard-published">
     {showAllCourses ? "All Courses" : "Enrolled Courses"} ({displayedCourses.length})
   </h2>
-  <button 
-    className={`btn ${showAllCourses ? 'btn-primary' : 'btn-secondary'}`}
-    onClick={() => setShowAllCourses(!showAllCourses)}
-  >
-    {showAllCourses ? 'Show Enrolled Only' : 'Show All Courses'}
-  </button>
+ <button 
+  className={`btn ${enrolling ? 'btn-primary' : 'btn-secondary'}`}
+  onClick={() => setEnrolling(!enrolling)}
+>
+  {enrolling ? 'My Courses' : 'All Courses'}
+</button>
 </div>
 <hr />
   
@@ -144,7 +146,7 @@ const canEdit = currentUser?.role === "FACULTY";
   <Button variant="primary">Go</Button>
   
   <div>
-    {/* Enrollment buttons */}
+    {/* Enrollment buttons
     {isEnrolled(course._id) ? (
       <button 
         className="btn btn-danger btn-sm me-2"
@@ -167,7 +169,31 @@ const canEdit = currentUser?.role === "FACULTY";
       >
         Enroll
       </button>
-    )}
+    )} */}
+{isEnrolled(course._id) ? (
+  <button 
+    className="btn btn-danger btn-sm me-2"
+    onClick={(e) => {
+      e.preventDefault();
+      updateEnrollment(course._id, false); // <-- NEW
+    }}
+    disabled={loading}
+  >
+    Unenroll
+  </button>
+) : (
+  <button 
+    className="btn btn-success btn-sm me-2"
+    onClick={(e) => {
+      e.preventDefault();
+      updateEnrollment(course._id, true);  // <-- NEW
+    }}
+    disabled={loading}
+  >
+    Enroll
+  </button>
+)}
+
     
     {/* Faculty-only buttons */}
     {canEdit && (

@@ -2,6 +2,8 @@ import axios from "axios";
 
 const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 const COURSES_API = `${REMOTE_SERVER}/api/courses`;
+const axiosWithCredentials = axios.create({ withCredentials: true }); 
+
 
 export const fetchAllCourses = async () => {
   const { data } = await axios.get(COURSES_API);
@@ -36,6 +38,10 @@ export const deleteModule = async (courseId: string, moduleId: string) => {
 export const updateModule = async (courseId: string, module: any) => {
   const response = await axios.put(`${COURSES_API}/${courseId}/modules/${module._id}`, module);
   return response.data;
+};
+export const createCourse = async (course: any) => { 
+ const { data } = await axiosWithCredentials.post(COURSES_API, course); 
+ return data; 
 };
 
 
