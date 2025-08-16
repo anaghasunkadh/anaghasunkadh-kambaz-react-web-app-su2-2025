@@ -3,7 +3,7 @@ import { Button, Card, Col, Row, FormControl } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import * as enrollmentsClient from "./Enrollments/client";
-import { setEnrollments, addEnrollment, removeEnrollment } from "./Enrollments/reducer";
+import { setEnrollments } from "./Enrollments/reducer";
 
 export default function Dashboard({
   courses, course, setCourse, addNewCourse, deleteCourse, updateCourse, enrolling, setEnrolling, updateEnrollment
@@ -22,7 +22,7 @@ export default function Dashboard({
  
 const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
 const [showAllCourses] = useState(false);
-const [loading, setLoading] = useState(false);
+const [loading] = useState(false);
 const dispatch = useDispatch();
 useEffect(() => {
   fetchEnrollments();
