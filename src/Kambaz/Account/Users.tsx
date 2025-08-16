@@ -7,7 +7,7 @@ import { FaPlus } from "react-icons/fa";
 export default function Users() {
   const [users, setUsers] = useState<any[]>([]);
   const [role, setRole] = useState("");
-  const [name, setName] = useState(""); // ADD THIS for name filtering
+  const [, setName] = useState(""); // ADD THIS for name filtering
   const { uid } = useParams();
 
   const createUser = async () => {

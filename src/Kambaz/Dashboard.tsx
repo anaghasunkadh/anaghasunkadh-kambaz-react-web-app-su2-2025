@@ -21,7 +21,7 @@ export default function Dashboard({
   const { currentUser } = useSelector((state: any) => state.accountReducer);
  
 const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
-const [showAllCourses, setShowAllCourses] = useState(false);
+const [showAllCourses] = useState(false);
 const [loading, setLoading] = useState(false);
 const dispatch = useDispatch();
 useEffect(() => {
@@ -47,31 +47,7 @@ const isEnrolled = (courseId: string) => {
   );
 };
 
-const handleEnroll = async (courseId: string) => {
-  if (!currentUser || loading) return;
-  setLoading(true);
-  try {
-    const enrollment = await enrollmentsClient.enrollMeInCourse(courseId);
-    dispatch(addEnrollment(enrollment));
-  } catch (error) {
-    console.error("Failed to enroll:", error);
-  } finally {
-    setLoading(false);
-  }
-};
 
-const handleUnenroll = async (courseId: string) => {
-  if (!currentUser || loading) return;
-  setLoading(true);
-  try {
-    await enrollmentsClient.unenrollMeFromCourse(courseId);
-    dispatch(removeEnrollment({ userId: currentUser._id, courseId }));
-  } catch (error) {
-    console.error("Failed to unenroll:", error);
-  } finally {
-    setLoading(false);
-  }
-};
 
 // Add this to filter courses
 const displayedCourses = enrolling 
